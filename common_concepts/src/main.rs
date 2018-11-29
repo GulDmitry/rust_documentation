@@ -104,6 +104,17 @@ fn main() {
         prev = next;
         next = tmp + next;
     }
+
+    // Ownership
+    let s1 = String::from("hello");
+    let s2 = s1;
+//    println!("{}, world!", s1); // Error s1 is out of scope here.
+    let s2 = s1.clone(); // Is fine, put s2 to heap, not just a pointer.
+
+    let x = 5;
+    let y = x;
+    println!("x = {}, y = {}", x, y); // Is fine because of fixed size.
+    // The same for bool, float, char, tuple of copied types.
 }
 
 fn five() -> i32 {
