@@ -109,12 +109,56 @@ fn main() {
     let s1 = String::from("hello");
     let s2 = s1;
 //    println!("{}, world!", s1); // Error s1 is out of scope here.
-    let s2 = s1.clone(); // Is fine, put s2 to heap, not just a pointer.
+//    let s2 = s1.clone(); // Is fine, put s2 to heap, not just a pointer.
 
     let x = 5;
     let y = x;
     println!("x = {}, y = {}", x, y); // Is fine because of fixed size.
     // The same for bool, float, char, tuple of copied types.
+
+    // References and Borrowing
+    let s1 = String::from("hello");
+    let len = calculate_length(&s1);
+    println!("The length of '{}' is {}.", s1, len);
+
+    //At any given time, you can have either (but not both of) one mutable reference or
+    // any number of immutable references.
+    let mut s = String::from("hello");
+    change(&mut s);
+    let r1 = &mut s;
+//    let r2 = &mut s; // Second mutable borrow is forbidden.
+
+    // Slice
+    let mut s = String::from("hello world");
+    let word = first_word(&s); // word will get the value 5
+    println!("{}", word);
+
+    let s = String::from("hello world");
+    let hello = &s[0..=4]; // ..= include the last number.
+
+    let a = [1, 2, 3, 4, 5];
+    let slice = &a[1..3];
+    println!("{:?}", slice); //  2, 3
+}
+
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+
+fn change(some_string: &mut String) {
+    some_string.push_str(", world");
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
 }
 
 fn five() -> i32 {
